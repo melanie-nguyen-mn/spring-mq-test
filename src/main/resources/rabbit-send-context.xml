@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="connectionFactory"
+	      class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+	    <constructor-arg value="local-rabbitmq03"/>
+	    <property name="username" value="admin"/>
+	    <property name="password" value="admin"/>
+	</bean>
+	
+	<rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
+	
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"  exchange="myExchange"/>
+
+	<rabbit:queue id="myQueue" name="myQueue" />
+ 	<rabbit:fanout-exchange name="myExchange" xmlns="http://www.springframework.org/schema/rabbit">
+ 	    <bindings>
+        <binding queue="myQueue"/>
+    	</bindings>
+	</rabbit:fanout-exchange>
+
+</beans>
