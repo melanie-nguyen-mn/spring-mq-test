@@ -1,0 +1,124 @@
+﻿install vagrant
+
+
+Download vagrant and setup to manage VMs
+http://www.vagrantup.com/downloads.html
+go through the tutorial
+
+
+$ mkdir ~/vagrant_projects
+$ cd ~/vagrant_projects
+$ mkdir rabbitmq01
+$ vagrant init -> Vagrantfile will be created
+$ vagrant box add hashicorp/precise32 ->  create image file download from cloud
+$ vagrant init
+$ vi Vigrantfile
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise32"
+  config.vm.provision :shell, path: "../Scripts/rabbitmq.sh"
+  config.vm.network "private_network", ip: "192.168.50.14"    #some ip address here
+  config.vm.hostname = "local-rabbitmq01"
+end
+#update 
+configure the installation and setup for rabbitmq
+vi rabbitmq.sh
+#!/usr/bin/env bash
+
+
+cat >> /etc/apt/sources.list <<EOT
+deb http://www.rabbitmq.com/debian/ testing main
+EOT
+
+
+wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+apt-key add rabbitmq-signing-key-public.asc
+
+
+apt-get update
+
+
+apt-get install -q -y screen htop vim curl wget
+apt-get install -q -y rabbitmq-server
+
+
+# RabbitMQ Plugins
+#service rabbitmq-server stop
+rabbitmq-plugins enable rabbitmq_management
+rabbitmq-plugins enable rabbitmq_jsonrpc
+#service rabbitmq-server start
+
+
+rabbitmq-plugins list
+
+
+# add admin user to use web interface for managing rabbitmq
+rabbitmqctl add_user admin admin
+rabbitmqctl set_user_tags admin administrator
+
+
+service rabbitmq-server stop
+service rabbitmq-server start
+
+
+
+
+
+
+sudo vi /etc/hosts  # add new line/entry:    192.168.50.14  local-rabbitmq01
+
+
+$ vagrant up
+
+
+$vagrant ssh ⇒ ssh to the vm
+$sudo vi /etc/host  # add 2 entries
+127.0.0.1        localhost
+127.0.1.1 local-rabbitmq01 local-rabbitmq0<x>
+
+
+$vagrant shutdown
+$vagrant reload --provision
+
+
+Open a browser and enter:  http://local-rabbitmq01:15672
+(http://<host>:<mq port>)
+login as:   admin
+password: admin
+
+
+
+
+To stop:
+$ vagrant halt
+$ vagrant suspend
+$ vagrant destroy
+
+
+
+
+Configure private network: 
+   ip setting: http://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
+$ vi Vagrantfile  -> add:  config.vm.network "private_network", ip: "192.168.50.4"
+$ vagrant load
+$ vagrant ssh
+    > ifconfig -> see the assigned IP address
+
+
+Configure rabbitmq 
+http://seletz.github.io/blog/2012/01/18/creating-a-rabbitmq-test-setup-with-vagrant/
+
+
+
+
+
+
+
+
+
+
+cd rabbitmq02
+vagrant up
+Open a browser and enter:  http://local-rabbitmq01:15672
+(http://<host>:<mq port>)
+login as:   admin
+password: admin

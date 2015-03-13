@@ -1,0 +1,11 @@
+  7 [
+  8  {rabbit,
+  9   [%%
+ 10    %% Make clustering happen *automatically* at startup - only applied
+ 11    %% to nodes that have just been reset or started for the first time.
+ 12    %% See http://www.rabbitmq.com/clustering.html#auto-config for
+ 13    %% further details.
+ 14    {cluster_nodes, {['rabbit@local-rabbitmq03', 'rabbit@local-rabbitmq04'], disc}}
+ 15    
+ 16   ]}
+ 17 ].

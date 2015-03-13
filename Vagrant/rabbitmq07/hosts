@@ -1,0 +1,4 @@
+# from /vagrant
+192.168.50.54   local-rabbitmq05
+192.168.50.64   local-rabbitmq06
+192.168.50.84   local-rabbitmq08

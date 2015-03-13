@@ -1,0 +1,22 @@
+%% -*- mode: erlang -*-
+%% ----------------------------------------------------------------------------
+%% RabbitMQ Sample Configuration File.
+%%
+%% See http://www.rabbitmq.com/configure.html for details.
+%% ----------------------------------------------------------------------------
+[
+   {rabbit,
+    [%%
+     %% Make clustering happen *automatically* at startup - only applied
+     %% to nodes that have just been reset or started for the first time.
+     %% See http://www.rabbitmq.com/clustering.html#auto-config for
+     %% further details.
+     {cluster_nodes, {[
+         'rabbit@local-rabbitmq05', 
+         'rabbit@local-rabbitmq06', 
+         'rabbit@local-rabbitmq07', 
+         'rabbit@local-rabbitmq08'
+         ], disc}}
+     
+    ]}
+].

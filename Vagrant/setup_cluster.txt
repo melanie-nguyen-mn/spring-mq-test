@@ -1,0 +1,38 @@
+sudo vi /etc/hosts #add hostnames to be in cluster
+sudo rabbitmqctl cluster_status
+sudo rabbitmqctl stop_app
+sudo rabbitmqctl reset 
+sudo rabbitmqctl stop
+sudo cp /vagrant/.erlang.cookie . (or /var/lib/rabbitmq)
+sudo chown rabbitmq:rabbitmq .erlang.cookie
+sudo rm -rf mnesia/
+sudo rabbitmq-server -detached
+sudo rabbitmqctl stop_app
+sudo rabbitmqctl join_cluster --ram rabbit@local-rabbitmq03
+sudo rabbitmqctl start_app
+sudo rabbitmqctl cluster_status
+
+sudo rabbitmqctl stop_app
+sudo rabbitmqctl change_cluster_node_type disc
+sudo rabbitmqctl start_app
+
+# add policy to make all queues high availability
+sudo rabbitmqctl set_policy ha-all "" '{"ha-mode":"all"}'
+
+new cluster 5, 6, 7, 8
+# RabbitMQ cluster config
+echo "Configuring CLUSTER"
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl stop
+
+cp /vagrant/.erlang.cookie /var/lib/rabbitmq
+chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+rm -rf /var/lib/rabbitmq/mnesia
+
+rabbitmq-server -detached
+rabbitmqctl stop_app
+rabbitmqctl start_app
+
+
+
